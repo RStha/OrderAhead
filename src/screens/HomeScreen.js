@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import {View, Text, Picker, Image, Dimensions, TouchableOpacity, StyleSheet} from 'react-native';
 import DropDownFlatList from '../screens/DropDownFlatList';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const airportArray = [
-    {id: '1', title: 'LaGuardia Airport (LGA)', terminals: ['Terminal C', 'Terminal D']},
-    {id: '2', title: 'John F. Kennedy International Airport (JFK)', terminals: ['Terminal 2', 'Terminal 5']},
-    {id: '3', title: 'Newark Liberty International Airport (EWR)', terminals: ['Concourse 1 (Gates 70-99)', 'Concourse 2 (Gates 101-115)', 'Concourse 3 (Gates 120-139)']}
+    {id: '1', title: 'LaGuardia Airport (LGA)', terminals: [{id: 'lga-c', title: 'Terminal C'}, {id: 'lga-d', title: 'Terminal D'}]},
+    {id: '2', title: 'John F. Kennedy International Airport (JFK)', terminals: [{id: 'jfk-t2', title: 'Terminal 2'}, {id: 'jfk-t5', title: 'Terminal 5'}]},
+    {id: '3', title: 'Newark Liberty International Airport (EWR)', terminals: [{id: 'ewr-c1', title: 'Concourse 1 (Gates 70-99)'}, {id: 'ewr-c2', title: 'Concourse 2 (Gates 101-115)'}, {id: 'ewr-c3', title: 'Concourse 3 (Gates 120-139)'}]}
 ];
 
 class HomeScreen extends Component {
@@ -19,6 +20,7 @@ class HomeScreen extends Component {
           airport: '',
           terminalArray: [],
           terminal: '', 
+          selectedID: '',
           showDropDownA: false,
           showTerminalDropDown: false
         }
@@ -44,15 +46,15 @@ class HomeScreen extends Component {
 
       updateTerminal = (selectedTerminal) => {
         this.setState({showTerminalDropDown: false})
-        this.setState({terminal: selectedTerminal})
+        this.setState({terminal: selectedTerminal.title})
+        this.setState({selectedID: selectedTerminal.id})
     }
 
     browseMenu = () => {
+        navigate('Menu')
     }
 
     render() {
-
-    var data = [];
         return (
             <View 
             style={styles.container}>
@@ -101,7 +103,11 @@ class HomeScreen extends Component {
                     updateValue = {this.updateTerminal}/>}
                 </View>
                 <TouchableOpacity 
-                onPress= {this.browseMenu} >
+                onPress={() => {
+                    this.props.navigation.navigate('Menu', {
+                        airportCode: this.state.selectedID
+                    })
+                  }} >
                     <Text style={styles.browseButton}>
                         Browse Menu
                     </Text>

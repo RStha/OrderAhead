@@ -9,7 +9,7 @@ import * as api from '../../services/api';
  */
 function* workFetchMenu() {
     try {
-        const data = yield call(Api.fetchMenu)
+        const data = yield call(api.fetchMenu)
         // create and yield a dispatch Effect
         yield put(actions.fetchMenuSuccess(data))
     } catch (err) {

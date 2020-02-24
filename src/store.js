@@ -1,47 +1,40 @@
-import {createSagaMiddleware} from 'redux-saga'
-import {createLogger} from 'redux-logger'
-import {applyMiddleware, createStore} from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import logger from 'redux-logger'
+import {applyMiddleware, createStore, compose} from 'redux'
 import menuReducer, { initialState } from './screens/Menu/reducer'
 import rootSaga from './screens/Menu/saga'
 import createSagas from './saga'
 
-let sagaMiddleware
 /**
  * Create the saga middleware
  */
-// sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware()
 
 /**
- * Mount it on the Store
+ * Adding this for debugging, either use extension or compose
  */
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
- const getMiddleWares = () => {
-     sagaMiddleware = createSagaMiddleware()
-     const baseMiddleWare = [sagaMiddleware]
-     return baseMiddleWare
- }
+/**
+ * Since create store can have only two parameter, add middleware and logger into enhancer
+ */
+const enhancer = composeEnhancer(
+  applyMiddleware(sagaMiddleware, 
+    logger)
+  // other store enhancers if any
+);
 
-const configureStore = (initialState = {}) => {
-    const store = createStore(menuReducer, initialState)
-    sagaMiddleware.run(createSagas)
-    return store
-}
+/**
+ *  Making store: Mount reducer and enhancer to the store.
+ */ 
+const store = createStore(
+    menuReducer, 
+    enhancer
+)
 
-// const store = createStore(
-//     menuReducer, 
-//     applyMiddleware(
-//         sagaMiddleware, 
-//         )
-// )
 /**
  * Run the Saga
  */
-// sagaMiddleware.run(rootSaga)
+sagaMiddleware.run(createSagas)
 
-// store.dispatch({type: 'Hello'})
-// const configureStore = () => {
-//     const store = store
-// }
-
-
-export default configureStore
+export default store
