@@ -24,7 +24,7 @@ class Menu extends Component {
     componentDidMount(){
         //fetch menu from export
         console.log(this.props.route)
-        this.props.fetchMenu(this.props.route)
+        this.props.fetchMenu(this.props.route.params.airportCode)
     }
 
     pressHandler = (selectedCategory) => {
@@ -77,7 +77,7 @@ export default connect(
     state => ({
         menu: state.categories //store 
     }), 
-    {fetchMenu} // action
+    {fetchMenu: (airportCode) => fetchMenu({airportCode})} // action
 )(Menu);
 
 

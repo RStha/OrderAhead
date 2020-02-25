@@ -7,13 +7,15 @@ import * as api from '../../services/api';
 /**
  * Worker saga for fetching menu: Will be fired on FETCH_MENU actions
  */
-function* workFetchMenu() {
+function* workFetchMenu(action) {
     try {
-        const data = yield call(api.fetchMenu)
+        const data = yield call(api.fetchMenu, action.payload.airportCode)
         // create and yield a dispatch Effect
         yield put(actions.fetchMenuSuccess(data))
     } catch (err) {
+
         yield put(actions.fetchMenuFailure(err))
+        console.log(err, "here is the error")
         // handleError(err, '')
     }
 }
@@ -24,7 +26,7 @@ function* workFetchMenu() {
 function* watchFetchMenu() {    
     while(true) {
         const action = yield take(actions.FETCH_MENU)
-        yield call(workFetchMenu, action.payload)
+        yield call(workFetchMenu, action)
     }
 }
 

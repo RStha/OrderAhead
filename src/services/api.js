@@ -7,7 +7,7 @@ import axios from 'axios'
  */
 export const fetchMenu = (airportCode) => {
 return http.post('/getMenu', 
-{'airportCode': 'jfk-t2'}
+{'airportCode': airportCode}
 )
 
 }

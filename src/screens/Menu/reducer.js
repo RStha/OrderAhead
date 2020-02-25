@@ -19,7 +19,7 @@ const menuReducer = handleActions ({
     {   
         // Destructuring the json object
         const { categoriesArray, itemsByCategory, items} = action.payload.data
-        const { bakery } = itemsByCategory.Bakery
+        // const { bakery } = itemsByCategory.Bakery
         
         return ({
         ...state,
@@ -27,7 +27,7 @@ const menuReducer = handleActions ({
         categories: categoriesArray,
         items: items,
         itemsByCategory: itemsByCategory,
-        bakery: bakery
+        // bakery: bakery
     })},
     [FETCH_MENU_FAILURE]: (state, action) => ({
         ...initialState,
